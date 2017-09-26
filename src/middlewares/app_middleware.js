@@ -1,4 +1,5 @@
-import { GET_REC_NEW_SONS, GET_RANK } from '../actions/app_action';
+import { GET_REC_NEW_SONS, GET_RANK, GET_LYRIC, GET_COMMENTS,
+         GET_SONG_DETAIL, GET_MUSIC_URL} from '../actions/app_action';
 
 const url = 'http://localhost:5001';
 
@@ -49,6 +50,78 @@ const appMiddleware = store => next => action => {
           ranks: {
             [id]: songs
           }
+        })
+      })
+  } else if(action.type === GET_LYRIC) {
+    const { id } = action;
+    fetch(`${url}/lyric?id=${id}`)
+      .then((response) => (response.json()))
+      .then((result) => {
+        next({
+          type: GET_LYRIC,
+          lyric: result.lrc.lyric
+        })
+      })
+  } else if(action.type === GET_COMMENTS) {
+    const { id } = action;
+    fetch(`${url}/comment/music?id=${id}&limit=10`)
+      .then((response) => (response.json()))
+      .then((result) => {
+        const hostComments = [];
+        const comments = [];
+        result.hotComments.map((comment) => {
+          const { avatarUrl, userId, nickname } = comment.user;
+          hostComments.push({
+            userId,
+            nickname,
+            avatarUrl,
+            likedCount: comment.likedCount,
+            time: comment.time,
+            content: comment.content
+          })
+        })
+        result.comments.map((comment) => {
+          const { avatarUrl, userId, nickname } = comment.user;
+          comments.push({
+            userId,
+            nickname,
+            avatarUrl,
+            likedCount: comment.likedCount,
+            time: comment.time,
+            content: comment.content
+          })
+        })
+        next({
+          type: GET_COMMENTS,
+          hostComments,
+          comments
+        })
+      })
+  } else if(action.type === GET_SONG_DETAIL) {
+    const { id } = action;
+    fetch(`${url}/song/detail?ids=${id}`)
+      .then((response) => (response.json()))
+      .then((result) => {
+        const picUrl = result.songs[0].al.picUrl;
+        const name = result.songs[0].name;
+        const artists = result.songs[0].ar;
+        next({
+          type: GET_SONG_DETAIL,
+          song: {
+            picUrl,
+            name,
+            artists
+          }
+        })
+      })
+  } else if(action.type === GET_MUSIC_URL) {
+    const { id } = action;
+    fetch(`${url}/music/url?id=${id}`)
+      .then((response) => (response.json()))
+      .then((result) => {
+        next({
+          type: GET_MUSIC_URL,
+          musicUrl: result.data[0].url
         })
       })
   } else {

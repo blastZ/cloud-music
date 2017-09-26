@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import Logo from 'react-icons/lib/md/library-music';
+import UserIcon from 'react-icons/lib/fa/user';
 
 const Container = styled.div`
   display: flex;
@@ -8,7 +9,8 @@ const Container = styled.div`
   position: fixed;
   top: 0px;
   width: 100%;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.6);
+  z-index: 200;
   left: 0px;
   height: 4em;
   padding-left: 1em;
@@ -55,6 +57,7 @@ export default class TopBar extends Component {
           </Text>
         </LeftContainer>
         <RightContainer>
+          <UserIcon style={{color: 'orange', fontSize: '1.4em'}}/>
           <LoginButton>
             Login
           </LoginButton>

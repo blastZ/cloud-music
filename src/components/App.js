@@ -6,14 +6,27 @@ import TopBar from './TopBar';
 import styled from 'styled-components';
 import MusicCard from './MusicCard';
 import Rank from './Rank';
+import SegmentBar from './SegmentBar';
+import { Switch, Route, withRouter } from 'react-router-dom';
+import SongDetail from './SongDetail';
+import LeftImageIcon from 'react-icons/lib/fa/angle-left';
+import RightImageIcon from 'react-icons/lib/fa/angle-right';
+
+const OutContainer = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
 
 const Container = styled.div`
   width: 100%;
   height: 100%;
-  background-image: url(${require('../imgs/bg.jpg')});
+  background-image: url(${(props) => props.bgImg});
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  position: relative;
+  transition: background-image 1.5s ease;
 `;
 
 const MusicContainer = styled.div`
@@ -35,34 +48,69 @@ const RankContainer = styled.div`
 `;
 
 class App extends Component {
+  state = {
+    backgroundImgList: [
+      require('../imgs/bg.jpg'),
+      require('../imgs/bg2.jpg'),
+      require('../imgs/bg3.jpg'),
+    ],
+    bgIndex: 0
+  }
+
+  increaseBgIndex = () => {
+    this.setState({
+      bgIndex: this.state.bgIndex + 1 >= this.state.backgroundImgList.length ? 0 : this.state.bgIndex + 1
+    })
+  }
+
+  decreaseBgIndex = () => {
+    this.setState({
+      bgIndex: this.state.bgIndex - 1 < 0 ? this.state.backgroundImgList.length - 1 : this.state.bgIndex - 1
+    })
+  }
+
   componentDidMount() {
     this.props.dispatch(getRecNewSongs());
   }
+
   render() {
     const { recNewSongs } = this.props;
     return (
-      <div style={{width: '100%', height: '100%'}}>
-        <Container>
-          <TopBar />
-          <SearchBar />
-        </Container>
-        <MusicContainer>
-          {
-            recNewSongs.map((son) => (
-              <MusicCard
-                key={son.id}
-                name={son.name}
-                picUrl={son.picUrl}/>
-            ))
-          }
-        </MusicContainer>
-        <RankContainer>
-          <Rank id={0} />
-          <Rank id={1} />
-          <Rank id={2} />
-          <Rank id={3} />
-        </RankContainer>
-      </div>
+        <Switch>
+          <Route exact path="/" render={() => (
+            <OutContainer>
+              <Container bgImg={this.state.backgroundImgList[this.state.bgIndex]}>
+                <LeftImageIcon onClick={this.decreaseBgIndex} className="left-img-icon"/>
+                <TopBar />
+                <SearchBar />
+                <RightImageIcon onClick={this.increaseBgIndex} className="right-img-icon"/>
+              </Container>
+              <SegmentBar title={'热门推荐'} />
+              <MusicContainer>
+                {
+                  recNewSongs.map((song) => (
+                    <MusicCard
+                      key={song.id}
+                      song={song}/>
+                  ))
+                }
+              </MusicContainer>
+              <SegmentBar title={'榜单'} />
+              <RankContainer>
+                <Rank id={0} />
+                <Rank id={1} />
+                <Rank id={2} />
+                <Rank id={3} />
+              </RankContainer>
+            </OutContainer>
+          )} />
+          <Route exact path="/song/:id" render={() => (
+            <OutContainer>
+              <TopBar />
+              <SongDetail />
+            </OutContainer>
+          )} />
+        </Switch>
     );
   }
 }
@@ -71,4 +119,4 @@ const mapStateToProps = ({ appReducer }) => ({
   recNewSongs: appReducer.recNewSongs
 })
 
-export default connect(mapStateToProps)(App);
+export default withRouter(connect(mapStateToProps)(App));

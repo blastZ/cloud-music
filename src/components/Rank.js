@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { getRank } from '../actions/app_action';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 const RankList = styled.div`
   margin: 20px;
@@ -21,6 +22,13 @@ const RankItem = styled.div`
   }
 `;
 
+const MusicLink = styled.p`
+  &:hover {
+    cursor: pointer;
+    color: orange;
+  }
+`;
+
 class Rank extends Component {
   state = {
     ranksName: [
@@ -36,6 +44,11 @@ class Rank extends Component {
     const { id } = this.props;
     this.props.dispatch(getRank(id))
   }
+
+  toSongDetail = (id) => {
+    this.props.history.push(`/song/${id}`);
+  }
+
   render() {
     const { ranks, id } = this.props;
     return (
@@ -44,7 +57,7 @@ class Rank extends Component {
         {ranks[id] && ranks[id].map((song, index) => (
           <RankItem key={song.id}>
             <p style={{color: `${index < 3 ? 'red' : 'black'}`, marginRight: '10px'}}>{index + 1}</p>
-            <p>{song.name}</p>
+            <MusicLink onClick={() => this.toSongDetail(song.id)}>{song.name}</MusicLink>
           </RankItem>
         ))}
       </RankList>
@@ -56,4 +69,4 @@ const mapStateToProps = ({appReducer}) => ({
   ranks: appReducer.ranks
 })
 
-export default connect(mapStateToProps)(Rank);
+export default withRouter(connect(mapStateToProps)(Rank));
