@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import Logo from 'react-icons/lib/md/library-music';
 import UserIcon from 'react-icons/lib/fa/user';
+import { connect } from 'react-redux';
+import { loginWithPhone } from '../actions/app_action';
 
 const Container = styled.div`
   display: flex;
@@ -46,7 +48,7 @@ const LoginButton = styled.button`
   }
 `;
 
-export default class TopBar extends Component {
+class TopBar extends Component {
   render() {
     return (
       <Container>
@@ -58,7 +60,7 @@ export default class TopBar extends Component {
         </LeftContainer>
         <RightContainer>
           <UserIcon style={{color: 'orange', fontSize: '1.4em'}}/>
-          <LoginButton>
+          <LoginButton onClick={() => this.props.dispatch(loginWithPhone())}>
             Login
           </LoginButton>
         </RightContainer>
@@ -66,3 +68,5 @@ export default class TopBar extends Component {
     )
   }
 }
+
+export default connect()(TopBar);

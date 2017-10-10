@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getRecNewSongs, getRank } from '../actions/app_action';
+import { getRecNewSongs } from '../actions/app_action';
 import SearchBar from './SearchBar';
 import TopBar from './TopBar';
 import styled from 'styled-components';
@@ -11,6 +11,7 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 import SongDetail from './SongDetail';
 import LeftImageIcon from 'react-icons/lib/fa/angle-left';
 import RightImageIcon from 'react-icons/lib/fa/angle-right';
+import PersonalCenter from './PersonalCenter';
 
 const OutContainer = styled.div`
   width: 100%;
@@ -39,10 +40,11 @@ const MusicContainer = styled.div`
 `;
 
 const RankContainer = styled.div`
-  width: 100%;
+  width: 85%;
   display: flex;
+  margin: 0 auto;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: space-between;
   margin-top: 20px;
   flex-wrap: wrap;
 `;
@@ -108,6 +110,12 @@ class App extends Component {
             <OutContainer>
               <TopBar />
               <SongDetail />
+            </OutContainer>
+          )} />
+          <Route exact path="/user/home" render={() => (
+            <OutContainer>
+              <TopBar />
+              <PersonalCenter />
             </OutContainer>
           )} />
         </Switch>

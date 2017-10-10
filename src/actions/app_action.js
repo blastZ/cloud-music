@@ -4,6 +4,9 @@ export const GET_LYRIC = 'GET_LYRIC';
 export const GET_COMMENTS = 'GET_COMMENTS';
 export const GET_SONG_DETAIL = 'GET_SONG_DETAIL';
 export const GET_MUSIC_URL = 'GET_MUSIC_URL';
+export const LOGIN_WITH_PHONE = 'LOGIN_WITH_PHONE';
+export const GET_USER_DETAIL = 'GET_USER_DETAIL';
+export const GET_PLAY_RECORD = 'GET_PLAY_RECORD';
 
 export const getRecNewSongs = () => ({
   type: GET_REC_NEW_SONS
@@ -31,5 +34,21 @@ export const getSongDetail = (id) => ({
 
 export const getMusicUrl = (id) => ({
   type: GET_MUSIC_URL,
+  id
+})
+
+export const loginWithPhone = (phone, password) => ({
+  type: LOGIN_WITH_PHONE,
+  phone,
+  password
+})
+
+export const getUserDetail = (id) => ({
+  type: GET_USER_DETAIL,
+  id
+})
+
+export const getPlayRecord = (id) => ({
+  type: GET_PLAY_RECORD,
   id
 })

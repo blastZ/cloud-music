@@ -59,11 +59,14 @@ const CommentContainer = styled.div`
 
 const HostComments = styled.div``;
 
-const NormalComments = styled.div``;
+const NormalComments = styled.div`
+  margin-top: 20px;
+`;
 
 const Title = styled.div`
   border-bottom: 2px solid #e3e3e3;
-  padding: 10px;
+  padding: 10px 0px;
+  font-weight: bold;
 `;
 
 class SongDetail extends Component {
@@ -80,7 +83,8 @@ class SongDetail extends Component {
   }
 
   componentDidMount() {
-    document.body.scrollTop = 0;
+    console.log('haha');
+    document.getElementsByTagName('html')[0].scrollTop = 0;
   }
 
   render() {

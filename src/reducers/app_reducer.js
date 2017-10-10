@@ -1,5 +1,6 @@
 import { GET_REC_NEW_SONS, GET_RANK, GET_LYRIC,
-         GET_COMMENTS, GET_SONG_DETAIL, GET_MUSIC_URL} from '../actions/app_action';
+         GET_COMMENTS, GET_SONG_DETAIL, GET_MUSIC_URL,
+         LOGIN_WITH_PHONE, GET_PLAY_RECORD } from '../actions/app_action';
 
 const initState = {
   recNewSongs: [],
@@ -10,11 +11,14 @@ const initState = {
     hostComments: [],
     comments: [],
     musicUrl: ''
-  }
+  },
+  personalUserDetail: {},
+  recordList: [],
 }
 
 const appReducer = (state=initState, action) => {
-  const { recNewSongs, ranks, lyric, hostComments, comments, song, musicUrl } = action;
+  const { recNewSongs, ranks, lyric, hostComments, comments, song, musicUrl,
+          personalUserDetail, recordList } = action;
   switch (action.type) {
     case GET_REC_NEW_SONS: {
       return {
@@ -66,6 +70,18 @@ const appReducer = (state=initState, action) => {
           ...state.currentSong,
           musicUrl
         }
+      }
+    }
+    case LOGIN_WITH_PHONE: {
+      return {
+        ...state,
+        personalUserDetail
+      }
+    }
+    case GET_PLAY_RECORD: {
+      return {
+        ...state,
+        recordList
       }
     }
     default: return state;

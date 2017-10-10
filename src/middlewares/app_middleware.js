@@ -1,5 +1,6 @@
 import { GET_REC_NEW_SONS, GET_RANK, GET_LYRIC, GET_COMMENTS,
-         GET_SONG_DETAIL, GET_MUSIC_URL} from '../actions/app_action';
+         GET_SONG_DETAIL, GET_MUSIC_URL, LOGIN_WITH_PHONE,
+         GET_USER_DETAIL, GET_PLAY_RECORD} from '../actions/app_action';
 
 const url = 'http://localhost:5001';
 
@@ -24,10 +25,12 @@ const appMiddleware = store => next => action => {
               const picUrl = result.songs[0].al.picUrl;
               recNewSongs[i].picUrl = picUrl;
               if(i === recNewSongs.length - 1) {
-                next({
-                  type: GET_REC_NEW_SONS,
-                  recNewSongs
-                })
+                setTimeout(() => {
+                  next({
+                    type: GET_REC_NEW_SONS,
+                    recNewSongs
+                  })
+                }, 0)
               }
             })
         }
@@ -122,6 +125,96 @@ const appMiddleware = store => next => action => {
         next({
           type: GET_MUSIC_URL,
           musicUrl: result.data[0].url
+        })
+      })
+  } else if(action.type === LOGIN_WITH_PHONE) {
+    const { phone, password } = action;
+    let personalUserDetail = {};
+    fetch(`${url}/login/cellphone?phone=17826855443&password=2607656`)
+      .then((response) => (response.json()))
+      .then((result) => {
+        const userId = result.account.id;
+        fetch(`${url}/user/detail?uid=${userId}`)
+          .then((response) => (response.json()))
+          .then((result) => {
+            const avatarUrl = result.profile.avatarUrl;
+            const name = result.profile.nickname;
+            const signature = result.profile.signature;
+            const birthday = result.profile.birthday;
+            const city = result.profile.city;
+            const follows = result.profile.follows;
+            const followeds = result.profile.followeds;
+            const playlistCount = result.profile.playlistCount;
+            const level = result.level;
+            personalUserDetail = {
+              name,
+              avatarUrl,
+              signature,
+              birthday,
+              city,
+              follows,
+              followeds,
+              playlistCount,
+              level
+            }
+            store.dispatch({
+              type: GET_PLAY_RECORD,
+              id: userId
+            })
+            next({
+              type: LOGIN_WITH_PHONE,
+              personalUserDetail
+            })
+          })
+      })
+  } else if(action.type === GET_USER_DETAIL) {
+    const { id } = action;
+    let userDetail = {};
+    fetch(`${url}/user/detail?uid=${id}`)
+      .then((response) => (response.json()))
+      .then((result) => {
+        const avatarUrl = result.profile.experts.avatarUrl;
+        const name = result.profile.experts.nickname;
+        const signature = result.profile.experts.signature;
+        const birthday = result.profile.experts.birthday;
+        const city = result.profile.experts.city;
+        const follows = result.profile.experts.follows;
+        const followeds = result.profile.experts.followeds;
+        const playlistCount = result.profile.experts.playlistCount;
+        const level = result.profile.level;
+        userDetail = {
+          name,
+          avatarUrl,
+          signature,
+          birthday,
+          city,
+          follows,
+          followeds,
+          playlistCount,
+          level
+        }
+      })
+    next({
+      type: 'GET_USER_DETAIL',
+      userDetail
+    })
+  } else if(action.type === GET_PLAY_RECORD) {
+    const { id } = action;
+    const recordList = [];
+    fetch(`${url}/user/record?uid=${id}&type=1`)
+      .then((response) => (response.json()))
+      .then((result) => {
+        result.weekData.map((song) => {
+          recordList.push({
+            playCount: song.playCount,
+            ar: song.song.ar,
+            name: song.song.name,
+            id: song.song.id
+          })
+        })
+        next({
+          type: GET_PLAY_RECORD,
+          recordList
         })
       })
   } else {
