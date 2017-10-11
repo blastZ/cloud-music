@@ -15,6 +15,7 @@ import PersonalCenter from './PersonalCenter';
 import LoginView from './LoginView';
 import SearchView from './SearchView';
 import ArtistsView from './ArtistsView';
+import PlayListView from './PlayListView';
 
 const OutContainer = styled.div`
   width: 100%;
@@ -107,7 +108,7 @@ class App extends Component {
                   }
                 </MusicContainer>
                 <SegmentBar title={'榜单'} />
-                <RankContainer>
+                <RankContainer style={{paddingBottom: '64px'}}>
                   <Rank id={0} />
                   <Rank id={1} />
                   <Rank id={2} />
@@ -137,6 +138,12 @@ class App extends Component {
               <OutContainer>
                 <TopBar />
                 <ArtistsView />
+              </OutContainer>
+            )} />
+            <Route exact path="/discover/playlist" render={() => (
+              <OutContainer>
+                <TopBar />
+                <PlayListView />
               </OutContainer>
             )} />
           </Switch>

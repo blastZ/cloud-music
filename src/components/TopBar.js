@@ -77,8 +77,8 @@ class TopBar extends Component {
           </Text>
           <NavList>
             <li onClick={() => this.props.history.push('/')} style={{marginLeft: '20px'}}>主页</li>
-            <li>歌手</li>
-            <li>歌单</li>
+            <li onClick={() => this.props.history.push('/discover/artist')}>歌手</li>
+            <li onClick={() => this.props.history.push('/discover/playlist')}>歌单</li>
             <li>电台</li>
           </NavList>
         </LeftContainer>

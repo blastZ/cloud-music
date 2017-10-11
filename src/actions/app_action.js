@@ -8,6 +8,8 @@ export const LOGIN_WITH_PHONE = 'LOGIN_WITH_PHONE';
 export const GET_USER_DETAIL = 'GET_USER_DETAIL';
 export const GET_PLAY_RECORD = 'GET_PLAY_RECORD';
 export const GET_SEARCH_RESULT = 'GET_SEARCH_RESULT';
+export const GET_HOT_ARTISTS = 'GET_HOT_ARTISTS';
+export const GET_HOT_PLAY_LIST = 'GET_HOT_PLAY_LIST';
 
 export const getRecNewSongs = () => ({
   type: GET_REC_NEW_SONS
@@ -56,4 +58,12 @@ export const getPlayRecord = (id) => ({
 export const getSearchResult = (keywords) => ({
   type: GET_SEARCH_RESULT,
   keywords
+})
+
+export const getHotArtists = () => ({
+  type: GET_HOT_ARTISTS
+})
+
+export const getHotPlayList = () => ({
+  type: GET_HOT_PLAY_LIST
 })

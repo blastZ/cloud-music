@@ -1,6 +1,7 @@
 import { GET_REC_NEW_SONS, GET_RANK, GET_LYRIC, GET_COMMENTS,
          GET_SONG_DETAIL, GET_MUSIC_URL, LOGIN_WITH_PHONE,
-         GET_USER_DETAIL, GET_PLAY_RECORD, GET_SEARCH_RESULT} from '../actions/app_action';
+         GET_USER_DETAIL, GET_PLAY_RECORD, GET_SEARCH_RESULT,
+         GET_HOT_ARTISTS, GET_HOT_PLAY_LIST } from '../actions/app_action';
 
 const url = 'http://localhost:5001';
 
@@ -230,6 +231,46 @@ const appMiddleware = store => next => action => {
         next({
           type: GET_SEARCH_RESULT,
           searchResultList
+        })
+      })
+  } else if(action.type === GET_HOT_ARTISTS) {
+    const hotArtistsList = [];
+    fetch(`${url}/top/artists?offset=0&limit=54`)
+      .then((response) => (response.json()))
+      .then((result) => {
+        result.artists.map((artist) => {
+          hotArtistsList.push({
+            name: artist.name,
+            picUrl: artist.img1v1Url,
+            id: artist.id
+          })
+        })
+        next({
+          type: GET_HOT_ARTISTS,
+          hotArtistsList
+        })
+      })
+  } else if(action.type === GET_HOT_PLAY_LIST) {
+    const hotPlayList = [];
+    fetch(`${url}/top/playlist?limit=20&order=hot`)
+      .then((response) => (response.json()))
+      .then((result) => {
+        result.playlists.map((playlist) => {
+          hotPlayList.push({
+            name: playlist.name,
+            id: playlist.id,
+            picUrl: playlist.coverImgUrl,
+            tags: playlist.tags,
+            playCount: playlist.playCount,
+            creator: {
+              id: playlist.creator.userId,
+              name: playlist.creator.nickname
+            }
+          })
+        })
+        next({
+          type: GET_HOT_PLAY_LIST,
+          hotPlayList
         })
       })
   } else {
