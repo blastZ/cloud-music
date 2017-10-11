@@ -7,6 +7,7 @@ export const GET_MUSIC_URL = 'GET_MUSIC_URL';
 export const LOGIN_WITH_PHONE = 'LOGIN_WITH_PHONE';
 export const GET_USER_DETAIL = 'GET_USER_DETAIL';
 export const GET_PLAY_RECORD = 'GET_PLAY_RECORD';
+export const GET_SEARCH_RESULT = 'GET_SEARCH_RESULT';
 
 export const getRecNewSongs = () => ({
   type: GET_REC_NEW_SONS
@@ -37,10 +38,9 @@ export const getMusicUrl = (id) => ({
   id
 })
 
-export const loginWithPhone = (phone, password) => ({
+export const loginWithPhone = (userId) => ({
   type: LOGIN_WITH_PHONE,
-  phone,
-  password
+  userId
 })
 
 export const getUserDetail = (id) => ({
@@ -51,4 +51,9 @@ export const getUserDetail = (id) => ({
 export const getPlayRecord = (id) => ({
   type: GET_PLAY_RECORD,
   id
+})
+
+export const getSearchResult = (keywords) => ({
+  type: GET_SEARCH_RESULT,
+  keywords
 })

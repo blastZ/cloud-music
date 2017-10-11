@@ -85,6 +85,10 @@ const PlayList = styled.div`
 `;
 
 class PersonalCenter extends Component {
+  componentDidMount() {
+    document.getElementsByTagName('html')[0].scrollTop = 0;
+  }
+  
   render() {
     const { name,avatarUrl,signature,birthday,city,
             follows,followeds,playlistCount,level } = this.props.user;

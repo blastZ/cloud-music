@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { getSearchResult } from '../actions/app_action';
 
 const Input = styled.input`
   padding: 0.5em 1em;
@@ -23,12 +26,31 @@ const Container = styled.div`
   height: 100%;
 `;
 
-export default class SearchBar extends Component {
+class SearchBar extends Component {
+  state = {
+    keywords: ''
+  }
+
+  handleKeywords = (e) => {
+    this.setState({
+      keywords: e.target.value
+    })
+  }
+
+  handleKeyPress = (e) => {
+    if(e.key === 'Enter') {
+      this.props.dispatch(getSearchResult(this.state.keywords));
+      this.props.history.push('/search');
+    }
+  }
+
   render() {
     return (
       <Container>
-        <Input />
+        <Input value={this.state.keywords} onChange={this.handleKeywords} onKeyPress={this.handleKeyPress}/>
       </Container>
     )
   }
 }
+
+export default withRouter(connect()(SearchBar));

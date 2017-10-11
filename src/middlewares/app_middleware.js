@@ -1,6 +1,6 @@
 import { GET_REC_NEW_SONS, GET_RANK, GET_LYRIC, GET_COMMENTS,
          GET_SONG_DETAIL, GET_MUSIC_URL, LOGIN_WITH_PHONE,
-         GET_USER_DETAIL, GET_PLAY_RECORD} from '../actions/app_action';
+         GET_USER_DETAIL, GET_PLAY_RECORD, GET_SEARCH_RESULT} from '../actions/app_action';
 
 const url = 'http://localhost:5001';
 
@@ -60,9 +60,10 @@ const appMiddleware = store => next => action => {
     fetch(`${url}/lyric?id=${id}`)
       .then((response) => (response.json()))
       .then((result) => {
+        console.log(result);
         next({
           type: GET_LYRIC,
-          lyric: result.lrc.lyric
+          lyric: result.lrc ? result.lrc.lyric : '纯音乐, 无歌词'
         })
       })
   } else if(action.type === GET_COMMENTS) {
@@ -128,44 +129,39 @@ const appMiddleware = store => next => action => {
         })
       })
   } else if(action.type === LOGIN_WITH_PHONE) {
-    const { phone, password } = action;
+    const { userId } = action;
     let personalUserDetail = {};
-    fetch(`${url}/login/cellphone?phone=17826855443&password=2607656`)
+    fetch(`${url}/user/detail?uid=${userId}`)
       .then((response) => (response.json()))
       .then((result) => {
-        const userId = result.account.id;
-        fetch(`${url}/user/detail?uid=${userId}`)
-          .then((response) => (response.json()))
-          .then((result) => {
-            const avatarUrl = result.profile.avatarUrl;
-            const name = result.profile.nickname;
-            const signature = result.profile.signature;
-            const birthday = result.profile.birthday;
-            const city = result.profile.city;
-            const follows = result.profile.follows;
-            const followeds = result.profile.followeds;
-            const playlistCount = result.profile.playlistCount;
-            const level = result.level;
-            personalUserDetail = {
-              name,
-              avatarUrl,
-              signature,
-              birthday,
-              city,
-              follows,
-              followeds,
-              playlistCount,
-              level
-            }
-            store.dispatch({
-              type: GET_PLAY_RECORD,
-              id: userId
-            })
-            next({
-              type: LOGIN_WITH_PHONE,
-              personalUserDetail
-            })
-          })
+        const avatarUrl = result.profile.avatarUrl;
+        const name = result.profile.nickname;
+        const signature = result.profile.signature;
+        const birthday = result.profile.birthday;
+        const city = result.profile.city;
+        const follows = result.profile.follows;
+        const followeds = result.profile.followeds;
+        const playlistCount = result.profile.playlistCount;
+        const level = result.level;
+        personalUserDetail = {
+          name,
+          avatarUrl,
+          signature,
+          birthday,
+          city,
+          follows,
+          followeds,
+          playlistCount,
+          level
+        }
+        store.dispatch({
+          type: GET_PLAY_RECORD,
+          id: userId
+        })
+        next({
+          type: LOGIN_WITH_PHONE,
+          personalUserDetail
+        })
       })
   } else if(action.type === GET_USER_DETAIL) {
     const { id } = action;
@@ -215,6 +211,25 @@ const appMiddleware = store => next => action => {
         next({
           type: GET_PLAY_RECORD,
           recordList
+        })
+      })
+  } else if(action.type === GET_SEARCH_RESULT) {
+    const { keywords } = action;
+    const searchResultList = [];
+    fetch(`${url}/search?keywords=${keywords}`)
+      .then((response) => (response.json()))
+      .then((result) => {
+        result.result.songs.map((song) => {
+          searchResultList.push({
+            id: song.id,
+            name: song.name,
+            artists: song.artists,
+            duration: song.duration
+          })
+        })
+        next({
+          type: GET_SEARCH_RESULT,
+          searchResultList
         })
       })
   } else {
