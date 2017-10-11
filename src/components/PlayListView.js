@@ -91,17 +91,17 @@ class PlayListView extends Component {
         <SegmentBar title="热门歌单" />
         <PlayListUL>
           {this.props.hotPlayList.map((playlist) => (
-            <PlayList>
+            <PlayList key={playlist.name + playlist.id}>
               <LeftContainer>
-                <img src={playlist.picUrl} />
+                <img onClick={() => this.props.history.push(`/playlist/${playlist.id}`)} src={playlist.picUrl} />
               </LeftContainer>
               <RightContainer>
-                <Name>{playlist.name}</Name>
+                <Name onClick={() => this.props.history.push(`/playlist/${playlist.id}`)}>{playlist.name}</Name>
                 <Creator>{`by ${playlist.creator.name}`}</Creator>
                 <p style={{margin: '5px 0px', fontSize: '0.9em'}}>标签:</p>
                 <Tags>
-                  {playlist.tags.map((tag) => (
-                    <Tag>{tag}</Tag>
+                  {playlist.tags.map((tag, index) => (
+                    <Tag key={tag + index}>{tag}</Tag>
                   ))}
                 </Tags>
                 <PlayCount>{`播放次数: ${playlist.playCount}`}</PlayCount>

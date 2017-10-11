@@ -50,6 +50,8 @@ const SongRightContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 50%;
+  height: 600px;
+  overflow-y: auto;
 `;
 
 const CommentContainer = styled.div`
@@ -83,7 +85,6 @@ class SongDetail extends Component {
   }
 
   componentDidMount() {
-    console.log('haha');
     document.getElementsByTagName('html')[0].scrollTop = 0;
   }
 

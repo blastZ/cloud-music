@@ -32,6 +32,10 @@ const MusicLink = styled.p`
 
 const Artist = styled.p`
   width: 20%;
+  &:hover {
+    cursor: pointer;
+    color: orange;
+  }
 `;
 
 class SingleSong extends Component {
@@ -40,7 +44,7 @@ class SingleSong extends Component {
     return (
       <Container style={{background: `${index % 2 === 0 ? 'white' : '#f7f7f7'}`}}>
         <MusicLinkContainer><MusicLink onClick={() => this.props.history.push(`/song/${song.id}`)}>{song.name}</MusicLink></MusicLinkContainer>
-        <Artist>{song.artists[0].name}</Artist>
+        <Artist onClick={() => this.props.history.push(`/artist/${song.artists[0].id}`)}>{song.artists[0].name}</Artist>
         <p>{song.duration}</p>
       </Container>
     )

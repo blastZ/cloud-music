@@ -118,7 +118,6 @@ class LoginView extends Component {
         fetch(`http://localhost:5001/login/cellphone?phone=${this.state.phone}&password=${this.state.password}`)
           .then((response) => (response.json()))
           .then((result) => {
-            console.log(result)
             if(result.code !== 200) {
               this.setState({
                 errorMessage: '用户名或密码错误'

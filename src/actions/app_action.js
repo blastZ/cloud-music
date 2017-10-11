@@ -10,6 +10,9 @@ export const GET_PLAY_RECORD = 'GET_PLAY_RECORD';
 export const GET_SEARCH_RESULT = 'GET_SEARCH_RESULT';
 export const GET_HOT_ARTISTS = 'GET_HOT_ARTISTS';
 export const GET_HOT_PLAY_LIST = 'GET_HOT_PLAY_LIST';
+export const GET_ARTIST_DETAIL = 'GET_ARTIST_DETAIL';
+export const GET_PLAY_LIST_DETAIL = 'GET_PLAY_LIST_DETAIL';
+export const GET_PERSONAL_PLAY_LIST = 'GET_PERSONAL_PLAY_LIST';
 
 export const getRecNewSongs = () => ({
   type: GET_REC_NEW_SONS
@@ -66,4 +69,19 @@ export const getHotArtists = () => ({
 
 export const getHotPlayList = () => ({
   type: GET_HOT_PLAY_LIST
+})
+
+export const getArtistDetail = (id) => ({
+  type: GET_ARTIST_DETAIL,
+  id
+})
+
+export const getPlayListDetail = (id) => ({
+  type: GET_PLAY_LIST_DETAIL,
+  id
+})
+
+export const getPersonalPlayList = (id) => ({
+  type: GET_PERSONAL_PLAY_LIST,
+  id
 })

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getFormatedTime } from '../utils/helpers.js';
+import UpIcon from 'react-icons/lib/fa/thumbs-o-up';
 
 const Container = styled.div`
   width: 100%;
@@ -59,7 +60,7 @@ class Comment extends Component {
           </Content>
           <Information>
             <div style={{color: '#999'}}>{getFormatedTime(comment.time)}</div>
-            <div>{comment.likedCount}</div>
+            <div style={{display: 'flex', alignItems: 'center', marginRight: '8px'}}><UpIcon />{comment.likedCount}</div>
           </Information>
         </RightContainer>
       </Container>

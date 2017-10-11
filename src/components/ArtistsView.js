@@ -58,8 +58,8 @@ class ArtistsView extends Component {
         <ArtistsList>
           {this.props.hotArtistsList.map((artist, index) => (
             <Artist key={artist.id + artist.name}>
-              <img src={artist.picUrl} />
-              <p>{artist.name}</p>
+              <img onClick={() => this.props.history.push(`/artist/${artist.id}`)} src={artist.picUrl} />
+              <p onClick={() => this.props.history.push(`/artist/${artist.id}`)}>{artist.name}</p>
             </Artist>
           ))}
         </ArtistsList>

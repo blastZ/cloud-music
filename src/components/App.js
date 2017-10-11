@@ -16,6 +16,8 @@ import LoginView from './LoginView';
 import SearchView from './SearchView';
 import ArtistsView from './ArtistsView';
 import PlayListView from './PlayListView';
+import ArtistDetail from './ArtistDetail';
+import PlayListDetail from './PlayListDetail';
 
 const OutContainer = styled.div`
   width: 100%;
@@ -120,6 +122,18 @@ class App extends Component {
               <OutContainer>
                 <TopBar />
                 <SongDetail />
+              </OutContainer>
+            )} />
+            <Route exact path="/artist/:id" render={() => (
+              <OutContainer>
+                <TopBar />
+                <ArtistDetail />
+              </OutContainer>
+            )} />
+            <Route exact path="/playlist/:id" render={() => (
+              <OutContainer>
+                <TopBar />
+                <PlayListDetail />
               </OutContainer>
             )} />
             <Route exact path="/user/home" render={() => (

@@ -79,7 +79,6 @@ class TopBar extends Component {
             <li onClick={() => this.props.history.push('/')} style={{marginLeft: '20px'}}>主页</li>
             <li onClick={() => this.props.history.push('/discover/artist')}>歌手</li>
             <li onClick={() => this.props.history.push('/discover/playlist')}>歌单</li>
-            <li>电台</li>
           </NavList>
         </LeftContainer>
         <RightContainer>

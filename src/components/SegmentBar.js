@@ -8,6 +8,10 @@ const Container = styled.div`
   padding: 20px;
 `;
 
+const FullContainer = styled.div`
+  width: 100% !important;
+`;
+
 const Row = styled.div`
   display: flex;
   flex-direction: row;
@@ -25,8 +29,19 @@ const Bar = styled.div`
 
 export default class SegmentBar extends Component {
   render() {
+    const { style } = this.props;
     return (
-      <Container>
+      style === 'full-width'
+      ? <FullContainer>
+        <Row>
+          <TitleIcon style={{color: '#C10D0C', fontSize: '1.5em', marginRight: '10px'}} />
+          <Title>
+            {this.props.title}
+          </Title>
+        </Row>
+        <Bar />
+      </FullContainer>
+      : <Container>
         <Row>
           <TitleIcon style={{color: '#C10D0C', fontSize: '1.5em', marginRight: '10px'}} />
           <Title>

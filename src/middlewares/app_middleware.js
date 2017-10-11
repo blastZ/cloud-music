@@ -1,7 +1,8 @@
 import { GET_REC_NEW_SONS, GET_RANK, GET_LYRIC, GET_COMMENTS,
          GET_SONG_DETAIL, GET_MUSIC_URL, LOGIN_WITH_PHONE,
          GET_USER_DETAIL, GET_PLAY_RECORD, GET_SEARCH_RESULT,
-         GET_HOT_ARTISTS, GET_HOT_PLAY_LIST } from '../actions/app_action';
+         GET_HOT_ARTISTS, GET_HOT_PLAY_LIST, GET_ARTIST_DETAIL,
+         GET_PLAY_LIST_DETAIL, GET_PERSONAL_PLAY_LIST } from '../actions/app_action';
 
 const url = 'http://localhost:5001';
 
@@ -159,6 +160,10 @@ const appMiddleware = store => next => action => {
           type: GET_PLAY_RECORD,
           id: userId
         })
+        store.dispatch({
+          type: GET_PERSONAL_PLAY_LIST,
+          id: userId
+        })
         next({
           type: LOGIN_WITH_PHONE,
           personalUserDetail
@@ -206,7 +211,8 @@ const appMiddleware = store => next => action => {
             playCount: song.playCount,
             ar: song.song.ar,
             name: song.song.name,
-            id: song.song.id
+            id: song.song.id,
+            dt: song.song.dt
           })
         })
         next({
@@ -271,6 +277,92 @@ const appMiddleware = store => next => action => {
         next({
           type: GET_HOT_PLAY_LIST,
           hotPlayList
+        })
+      })
+  } else if(action.type === GET_ARTIST_DETAIL) {
+    const { id } = action;
+    fetch(`${url}/artists?id=${id}`)
+      .then((response) => (response.json()))
+      .then((result) => {
+        const alias = result.artist.alias[0];
+        const name = result.artist.name;
+        const id = result.artist.id;
+        const briefDesc = result.artist.briefDesc;
+        const picUrl = result.artist.picUrl;
+        const hotSongs = [];
+        result.hotSongs.map((song) => {
+          hotSongs.push({
+            name: song.name,
+            id: song.id
+          })
+        })
+        const currentArtist = {
+          id,
+          name,
+          briefDesc,
+          alias,
+          picUrl,
+          hotSongs
+        }
+        next({
+          type: GET_ARTIST_DETAIL,
+          currentArtist
+        })
+      })
+  } else if(action.type === GET_PLAY_LIST_DETAIL) {
+    const { id } = action;
+    fetch(`${url}/playlist/detail?id=${id}`)
+      .then((response) => (response.json()))
+      .then((result) => {
+        const description = result.playlist.description;
+        const tags = result.playlist.tags;
+        const picUrl = result.playlist.coverImgUrl;
+        const name = result.playlist.name;
+        const id = result.playlist.id;
+        const tracks = [];
+        result.playlist.tracks.map((track) => {
+          tracks.push({
+            name: track.name,
+            id: track.id,
+            ar: track.ar,
+            dt: track.dt
+          })
+        });
+        const creator = {
+          name: result.playlist.creator.nickname,
+          id: result.playlist.creator.userId,
+          avatarUrl: result.playlist.creator.avatarUrl
+        };
+        const currentPlayList = {
+          description,
+          tags,
+          picUrl,
+          name,
+          id,
+          tracks,
+          creator
+        }
+        next({
+          type: GET_PLAY_LIST_DETAIL,
+          currentPlayList
+        })
+      })
+  } else if(action.type === 'GET_PERSONAL_PLAY_LIST') {
+    const { id } = action;
+    const personalPlayList = [];
+    fetch(`${url}/user/playlist?uid=${id}`)
+      .then((response) => (response.json()))
+      .then((result) => {
+        result.playlist.map((theList) => {
+          personalPlayList.push({
+            name: theList.name,
+            id: theList.id,
+            picUrl: theList.coverImgUrl
+          })
+        })
+        next({
+          type: GET_PERSONAL_PLAY_LIST,
+          personalPlayList
         })
       })
   } else {
